@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<style>
+  :root { --bg:#14161a; --panel:#1c1f24; --line:#2b3038; --ok:#3ddc84; --dim:#7b8794; --txt:#d7f5e3; --warn:#ffcc66; --bad:#ff6b6b; }
+  * { box-sizing: border-box; }
+  body { width: 400px; margin: 0; padding: 12px; background: var(--bg); color: var(--ok);
+         font: 12px/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+  header { display: flex; align-items: baseline; gap: 8px; margin-bottom: 8px; }
+  h1 { margin: 0; font-size: 14px; font-weight: 600; letter-spacing: .2px; }
+  .ver { color: var(--dim); font-size: 10px; }
+
+  .keys { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+  .keys span { background: var(--panel); border: 1px solid var(--line); border-radius: 4px;
+               padding: 1px 6px; font-size: 10.5px; color: var(--dim); }
+  .keys b { color: var(--ok); font-weight: 600; }
+
+  .ctx { background: var(--panel); border: 1px solid var(--line); border-radius: 5px;
+         padding: 7px 9px; margin-bottom: 10px; font-size: 11px; color: var(--dim);
+         word-break: break-all; }
+  .ctx .lbl { color: var(--dim); }
+  .ctx .val { color: #8fd6ff; }
+
+  fieldset { border: 1px solid var(--line); border-radius: 5px; padding: 9px 10px 10px; margin: 0 0 10px; }
+  legend { padding: 0 5px; color: var(--dim); font-size: 10.5px; text-transform: uppercase; letter-spacing: .6px; }
+  label { display: block; color: var(--dim); font-size: 10.5px; margin: 7px 0 3px; }
+  label:first-of-type { margin-top: 0; }
+  input { width: 100%; background: #111316; color: var(--ok); border: 1px solid var(--line);
+          border-radius: 4px; padding: 5px 7px; font: inherit; font-size: 11.5px; }
+  input:focus { outline: none; border-color: #2f6b45; }
+
+  .row { display: flex; gap: 6px; }
+  .row + .row { margin-top: 6px; }
+  button { flex: 1; background: var(--panel); color: var(--ok); border: 1px solid var(--line);
+           border-radius: 4px; padding: 6px 8px; font: inherit; font-size: 11.5px; cursor: pointer; }
+  button:hover { background: #262b32; border-color: #2f6b45; }
+  button:active { transform: translateY(1px); }
+  button.accent { color: var(--warn); }
+
+  .status { min-height: 15px; margin-top: 6px; font-size: 11px; }
+  #logs { margin-top: 10px; max-height: 230px; overflow: auto; background: #0e1013;
+          border: 1px solid var(--line); border-radius: 5px; padding: 8px;
+          white-space: pre-wrap; word-break: break-word; font-size: 11px; color: #9fb0a8; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>PPS Instatest PoC</h1>
+  <span class="ver" id="verTag"></span>
+</header>
+
+<div class="keys">
+  <span><b>Alt+Z</b> solve</span>
+  <span><b>Alt+X</b> answer panel</span>
+  <span><b>Alt+↑/↓</b> step</span>
+  <span><b>Alt+C</b> clear cache</span>
+</div>
+
+<div class="ctx" id="ctx">Detecting page…</div>
+
+<fieldset>
+  <legend>AI endpoint</legend>
+  <label for="baseUrl">Base URL — any host, LAN IP or localhost port</label>
+  <input type="text" id="baseUrl" placeholder="https://api.openai.com/v1" spellcheck="false" />
+  <label for="apiKey">API key (optional for local / keyless endpoints)</label>
+  <input type="password" id="apiKey" placeholder="sk-…" spellcheck="false" />
+  <label for="model">Model</label>
+  <input type="text" id="model" placeholder="gpt-4o-mini" spellcheck="false" />
+  <label for="aiTimeoutSec">Request timeout (seconds)</label>
+  <input type="text" id="aiTimeoutSec" placeholder="120" spellcheck="false" />
+</fieldset>
+
+<div class="row">
+  <button id="saveBtn">Save</button>
+  <button id="testBtn" class="accent">Test AI</button>
+</div>
+<div class="status" id="settingsStatus"></div>
+
+<div class="row" style="margin-top:6px">
+  <button id="injectBtn">Inject on this page</button>
+  <button id="clearBtn">Clear Logs</button>
+</div>
+
+<div id="logs">Loading logs…</div>
+<script src="popup.js"></script>
+</body>
+</html>
